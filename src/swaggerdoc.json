@@ -1,0 +1,642 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Fueled Backend",
+        "description": "Restaurant APIs",
+        "contact": {
+            "email": "fidelis.ojeah@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/v1"
+        }
+    ],
+    "paths": {
+        "/{userId}/restaurants": {
+            "get": {
+                "tags": [
+                    "restaurants"
+                ],
+                "summary": "Find and filter restaurants",
+                "description": "Returns list of non blacklisted restaurants",
+                "operationId": "filterRestaurants",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "isOpen",
+                        "in": "query",
+                        "description": "Filter by opened/closed restaurants",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "liked",
+                        "in": "query",
+                        "description": "Filter by restaurants you have liked",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "postcode",
+                        "in": "query",
+                        "description": "Filter restaurants by postcode",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "Filter restaurants by country",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Filter restaurants by city",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filter restaurants by name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Filter restaurants by id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurant"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{userId}/restaurants/like/{restaurantId}": {
+            "put": {
+                "tags": [
+                    "Like Restaurants"
+                ],
+                "summary": "Add a restaurant to your favourites",
+                "description": "Add a single restaurant to your favourites",
+                "operationId": "likeRestaurant",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "ID of restaurant",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "1d0e844a-1be6-401a-b7c7-474687669c99"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurantSingle"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Like Restaurants"
+                ],
+                "summary": "Remove a restaurant from your favourites",
+                "description": "Removes a single restaurant from your favourites",
+                "operationId": "unlikeRestaurant",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "ID of restaurant",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "1d0e844a-1be6-401a-b7c7-474687669c99"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurantSingle"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID or restaurant ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{userId}/restaurants/blacklists": {
+            "get": {
+                "tags": [
+                    "Blacklist Restaurants"
+                ],
+                "summary": "Find and filter blacklisted restaurants",
+                "description": "Returns list of blacklisted restaurants",
+                "operationId": "getBlacklistedRestaurants",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "isOpen",
+                        "in": "query",
+                        "description": "Filter by opened/closed restaurants",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "liked",
+                        "in": "query",
+                        "description": "Filter by restaurants you have liked",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "postcode",
+                        "in": "query",
+                        "description": "Filter restaurants by postcode",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "Filter restaurants by country",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Filter restaurants by city",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filter restaurants by name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Filter restaurants by id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurant"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{userId}/restaurants/blacklists/{restaurantId}": {
+            "put": {
+                "tags": [
+                    "Blacklist Restaurants"
+                ],
+                "summary": "Add a restaurant to your blacklist",
+                "description": "Add a single restaurant to your blacklist",
+                "operationId": "blacklistRestaurant",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "ID of restaurant",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "91ac833f-afbb-4c37-bb5a-864f572aeaec"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurantSingle"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Blacklist Restaurants"
+                ],
+                "summary": "Remove a restaurant from your blacklist",
+                "description": "Removes a single restaurant from your backlist",
+                "operationId": "unBlacklistRestaurant",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of currrent user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "3e6482cb-0bd5-4a0f-94c2-f68401062193"
+                    },
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "ID of restaurant",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "guid"
+                        },
+                        "example": "91ac833f-afbb-4c37-bb5a-864f572aeaec"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseRestaurantSingle"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID type supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID or restaurant ID not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIResponseError404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "APIResponseError400": {
+                "type": "object",
+                "properties": {
+                    "VERSION": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "number",
+                        "format": "int64"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    }
+                }
+            },
+            "APIResponseError404": {
+                "type": "object",
+                "properties": {
+                    "VERSION": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "number",
+                        "format": "int64"
+                    },
+                    "message": {
+                        "type": "string",
+                        "default": "EntityNotFoundException"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "help": {
+                                    "type": "string",
+                                    "default": "Method: GET"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "APIResponseRestaurant": {
+                "type": "object",
+                "properties": {
+                    "VERSION": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "number",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Restaurant"
+                        }
+                    }
+                }
+            },
+            "APIResponseRestaurantSingle": {
+                "type": "object",
+                "properties": {
+                    "VERSION": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "number",
+                        "format": "int64"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Restaurant"
+                    }
+                }
+            },
+            "Restaurant": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "postcode": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "isOpen": {
+                        "type": "boolean"
+                    },
+                    "liked": {
+                        "type": "string",
+                        "enum": [
+                            "0",
+                            "1"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about more",
+        "url": "https://github.com/fidelisojeah/fueled"
+    }
+}

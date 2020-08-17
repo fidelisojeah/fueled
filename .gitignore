@@ -108,3 +108,4 @@ database.sqlite3
 .DS_Store
 infrastructure/data/*
 junit.xml
+build/*
