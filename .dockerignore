@@ -1,0 +1,5 @@
+build/*
+infrastructure/*
+coverage/*
+junit.xml
+*.log

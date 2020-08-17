@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+    database:
+        image: postgres
+        environment:
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_DB=${DATABASE_NAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+
+        restart: always
+        volumes:
+            - './infrastructure/data/db/postgresql:/var/lib/postgresql/data'
+
+    application:
+        build: './'
+        # command: ['./wait-for-postgres.sh', 'database', 'npm', 'run migrate']
+        command: ['./wait-for-postgres.sh', 'database', 'npm', 'run start']
+        # command: ['./wait-for-postgres.sh', 'database', 'npm', 'run seed']
+        restart: always
+        ports:
+            - '3000:3000'
+        environment:
+            - DATABASE_HOST=database
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - LOGGER_LEVEL=${LOGGER_LEVEL}
+            - SERVER_PORT=3000
+        depends_on:
+            - database

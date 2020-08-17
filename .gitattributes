@@ -1,0 +1,9 @@
+* text=auto
+
+# lf endings for all files
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.txt text eol=lf
+*.png binary
+*.jpg binary
