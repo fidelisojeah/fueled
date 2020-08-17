@@ -66,6 +66,8 @@ npm run seed
 
 ### Running the application
 
+Documentation is available at: [/api-docs](http://localhost:3000/api-docs)
+
 #### For testing
 
 The applications tests are run with jest
